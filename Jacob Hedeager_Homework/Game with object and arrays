@@ -1,0 +1,75 @@
+TAB 1 = Snake2
+int[] dx={0,0,1,-1}, dy={1,-1,0,0};
+int w=30, h=30, sq=20, dir=2;
+snakeClass snake;
+
+void setup(){
+  size(600,600);
+  x.add(5);
+  y.add(5);
+  snake = new snakeClass();
+}
+void draw(){
+  background(255);
+  for(int i=0; i < w; i++)line(i*sq,0, i*sq, height); // loops for the vertical 
+  for(int i=0; i < h; i++) line(0,i*sq, width, i*sq); // and horizontal lines
+ snake.square();
+  }
+  void keyPressed(){
+  int newdir=key=='s'?0:(key=='w'?1: (key=='d'?2:(key=='a'?3:-1)));
+  if(newdir !=-1&&(x.size()<=1||!(x.get(1)==x.get(0)+dx[newdir]&&y.get(1)==y.get(0)+dy[newdir])))dir=newdir;
+}
+
+TAB 2 = snakeClass
+ArrayList<Integer> x = new ArrayList<Integer>(),y=new ArrayList<Integer>();
+
+class snakeClass {
+int  targetX=12, targetY=10;
+int sq=20;
+int Points=0;
+int i=0;
+int[] dx={0,0,1,-1}, dy={1,-1,0,0};
+boolean gameover=false; // determine when there's gameover
+  
+void square(){
+  for(int i=0; i < x.size(); i++){ // making the snake longer when hitting target
+fill(#FFA112);
+rect(x.get(i)*sq, y.get(i)*sq, sq, sq); //the snake
+ textSize(30); // point system
+  fill(255,0,0);
+  text("Points: "+Points,300,595);
+  }
+ if (!gameover){ // function determining when the game ends
+ fill(random(255),random(255),random(255)); // the apple/target
+  rect(targetX*sq,targetY*sq,sq,sq); // apple/target
+    if(x.get(0)<0||y.get(0)<0||x.get(0)>=w||y.get(0)>=h)gameover=true; // 
+    for(int i=1; i<x.size(); i++) if(x.get(0)==x.get(i)&& y.get(0)==y.get(i))gameover=true;
+     if(frameCount%5==0){
+    x.add(0,x.get(0)+dx[dir]); 
+    y.add(0,y.get(0)+dy[dir]); 
+    if(x.get(0)==targetX && y.get(0)==targetY){
+      targetX=(int)random(0,w);
+      targetY=(int)random(0,h);
+      Points=Points+1; // addition of points when hitting target 
+    }
+    else{
+   x.remove(x.size()-1);
+    y.remove(y.size()-1);
+    }
+ }
+  }else{ //what happens when losing
+    fill(255,0,0);
+    textSize(40);
+    textAlign(CENTER);
+    text("GAME OVER. Press Space",width/2,height/2);
+    if(keyPressed&&key==' '){ // action to restart the game
+      x.clear();
+      y.clear();
+      x.add(5);
+      y.add(5);
+      gameover=false;
+      Points=0;
+}
+}
+}
+}
